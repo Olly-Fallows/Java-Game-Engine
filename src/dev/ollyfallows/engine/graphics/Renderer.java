@@ -45,10 +45,10 @@ public class Renderer {
 		for (Entry<Mesh, ArrayList<Entity>> entry : entities.entrySet()) {
 			Mesh mesh = entry.getKey();
 			ArrayList<Entity> es = entry.getValue();
-			GL30.glBindVertexArray(mesh.getVAO());
+			GL30.glBindVertexArray(mesh.getVao());
 			GL30.glEnableVertexAttribArray(0);
 			GL30.glEnableVertexAttribArray(1);
-			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIBO());
+			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIbo());
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL13.glBindTexture(GL11.GL_TEXTURE_2D, mesh.getTexture().getTextureId());
 			for (Entity e : es) {

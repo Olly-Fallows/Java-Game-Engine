@@ -1,4 +1,5 @@
 package dev.ollyfallows.engine.graphics;
+
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -12,55 +13,66 @@ import dev.ollyfallows.engine.graphics.obj.Obj;
 import dev.ollyfallows.engine.graphics.obj.ObjData;
 import dev.ollyfallows.engine.maths.Vector3f;
 
-public class Mesh {
-	private Vertex[] vertices;
-	private float[] textCoords;
-	private int[] indices;
-	private int vao, pbo, ibo, tbo;
-	private Texture texture;
+public class Mesh implements Cloneable{
 	
-	public Mesh(Vertex[] vertices, int[] indices, Texture texture) {
+	private Vertex[] vertices;
+	private int[] indices;
+	private float[] normals;
+	private float[] textCoords;
+	private Texture texture;
+	private int vao, pbo, ibo, tbo;
+	
+	public Mesh(Vertex[] vertices, int[] indices, float[] normals, float[] textCoords, Texture texture) {
 		this.vertices = vertices;
 		this.indices = indices;
+		this.normals = normals;
+		this.textCoords = textCoords;
 		this.texture = texture;
 	}
-
+	
 	public Mesh(Obj obj, Texture texture) {
-		float[] vertArray = ObjData.getVerticesArray(obj);
-		vertices = new Vertex[vertArray.length/3];
+		float[] vert = ObjData.getVerticesArray(obj);
+		this.vertices = new Vertex[vert.length/3];
 		for (int a=0; a<vertices.length; a++) {
-			vertices[a] = new Vertex(new Vector3f(vertArray[a*3], vertArray[a*3+1], vertArray[a*3+2]));
+			vertices[a] = new Vertex(new Vector3f(vert[(a*3)], vert[(a*3)+1], vert[(a*3)+2]));
 		}
-		this.textCoords = ObjData.getTexCoordsArray(obj, 2);
-		indices = ObjData.getFaceVertexIndicesArray(obj);
+		this.textCoords = ObjData.getTexCoordsArray(obj, 2, true);
+		this.normals = ObjData.getNormalsArray(obj);
+		this.indices = ObjData.getFaceVertexIndicesArray(obj);
+		for (int a=0; a<6; a++)System.out.println(indices[a]);
 		this.texture = texture;
 	}
 	
 	public Mesh create() {
-		
 		vao = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(vao);
 		
-		FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
-		float[] positionData = new float[vertices.length * 3];
-		for (int i = 0; i < vertices.length; i++) {
-			positionData[i * 3] = vertices[i].getPosition().x;
-			positionData[i * 3 + 1] = vertices[i].getPosition().y;
-			positionData[i * 3 + 2] = vertices[i].getPosition().z;
+		FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(vertices.length*3);
+		float[] positionData = new float[vertices.length*3];
+		for (int a=0; a<vertices.length; a++) {
+			positionData[a*3] = vertices[a].getPosition().x;
+			positionData[a*3+1] = vertices[a].getPosition().y;
+			positionData[a*3+2] = vertices[a].getPosition().z;
 		}
-		positionBuffer.put(positionData).flip();
+		positionBuffer.put(positionData);
+		positionBuffer.flip();
 		
-		pbo = storeData(positionBuffer, 0, 3);
+		pbo = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, pbo);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positionBuffer, GL15.GL_STATIC_DRAW);
+		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		
-		System.out.printf("%f : %f\n", textCoords[0], textCoords[1]);
 		
 		FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(textCoords.length);
-		textureBuffer.put(textCoords).flip();
+		textureBuffer.put(textCoords);
+		textureBuffer.flip();
 		
 		tbo = storeData(textureBuffer, 1, 2);
 		
 		IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indices.length);
-		indicesBuffer.put(indices).flip();
+		indicesBuffer.put(indices);
+		indicesBuffer.flip();
 		
 		ibo = GL15.glGenBuffers();
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -85,6 +97,8 @@ public class Mesh {
 		GL15.glDeleteBuffers(tbo);
 		
 		GL30.glDeleteVertexArrays(vao);
+		
+		texture.destroy();
 	}
 
 	public Vertex[] getVertices() {
@@ -95,23 +109,23 @@ public class Mesh {
 		return indices;
 	}
 
-	public int getVAO() {
+	public int getVao() {
 		return vao;
 	}
 
-	public int getPBO() {
+	public int getPbo() {
 		return pbo;
 	}
-	
-	public int getTBO() {
-		return tbo;
-	}
 
-	public int getIBO() {
+	public int getIbo() {
 		return ibo;
 	}
 	
 	public Texture getTexture() {
 		return texture;
+	}
+	
+	public Mesh clone() throws CloneNotSupportedException{
+		return (Mesh)super.clone();
 	}
 }
