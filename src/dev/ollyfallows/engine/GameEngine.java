@@ -17,7 +17,7 @@ public class GameEngine {
 	private ArrayList<GameElement> gameElements = new ArrayList<GameElement>();
 	private static Renderer renderer = new Renderer();
 	
-	public Camera cam = new Camera(new Vector3f(0,0,3), new Vector3f(0,0,0));
+	public Camera cam = new Camera(new Vector3f(0,0,0), new Vector3f(0,0,0));
 	
 	public GameEngine(Window window) {
 		this.window = window;
@@ -30,7 +30,6 @@ public class GameEngine {
 			try {
 				long delta = System.currentTimeMillis()-lastLoop;
 				lastLoop = System.currentTimeMillis();
-				//System.out.println(1000/delta);
 				// Update pre frame
 				for (GameElement ele : gameElements) {
 					ele.preFrame(delta);
