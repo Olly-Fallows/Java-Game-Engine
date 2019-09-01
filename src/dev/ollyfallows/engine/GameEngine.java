@@ -2,6 +2,8 @@ package dev.ollyfallows.engine;
 
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL30;
+
 import dev.ollyfallows.engine.entities.Camera;
 import dev.ollyfallows.engine.entities.Entity;
 import dev.ollyfallows.engine.entities.GameElement;
@@ -22,7 +24,7 @@ public class GameEngine {
 	}
 	
 	public void loop() {
-		long lastLoop = System.currentTimeMillis();
+		long lastLoop = System.currentTimeMillis()-1;
 		
 		while (!window.shouldClose()) {
 			try {
@@ -42,16 +44,22 @@ public class GameEngine {
 				// Render changes
 				for (GameElement ele : gameElements) {
 					if (ele instanceof Entity) {
-						((Entity)ele).render(cam, renderer);
+						renderer.addEntity((Entity) ele);
 					}
 				}
-				window.render();
+				renderer.render(cam);
+				window.render(delta);
 				// Update post frame
 				for (GameElement ele : gameElements) {
 					ele.postFrame(delta);
 				}
 			}catch(Exception e) {
 				e.printStackTrace();
+			}
+			
+			int err;
+			while((err = GL30.glGetError()) != GL30.GL_NO_ERROR) {
+				System.out.println(err);
 			}
 		}
 	}

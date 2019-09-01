@@ -21,6 +21,7 @@ public class Window {
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouse = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
 	public static Matrix4f projection;
+	private long time = System.currentTimeMillis();
 	
 	public Window(int width, int height, String title) {
 		this.width = width;
@@ -57,10 +58,14 @@ public class Window {
 		GLFW.glfwPollEvents();
 	}
 	
-	public void render() {
+	public void render(long delta) {
 		GLFW.glfwSwapBuffers(window);
 		GL11.glClearColor(bgc.x, bgc.y, bgc.y, 1f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		if (System.currentTimeMillis()-time > 1000) {
+			GLFW.glfwSetWindowTitle(window, title + " | FPS: " + (1000/delta));
+			time = System.currentTimeMillis();
+		}
 	}
 	
 	public boolean shouldClose() {

@@ -1,0 +1,133 @@
+# Blender MTL File: 'test_stressdoll1.blend'
+# Material Count: 11
+
+newmtl Body
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.448544 0.391235 0.272588
+Ks 0.000000 0.000000 0.000000
+Ke 0.897088 0.782470 0.545176
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd D:\Work\ProtoStudy1\PlayerModel\Body.png
+map_d OutfitUnder1.png
+
+newmtl Outfit1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.616557 0.228838 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.616557 0.228838 1.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd D:\Work\ProtoStudy1\PlayerModel\Body.png
+map_d Outfit1.png
+
+newmtl Outfit1_Outfit1.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.616557 0.228838 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.616557 0.228838 1.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd D:\Work\ProtoStudy1\PlayerModel\Outfit1.png
+map_d Outfit1.png
+
+newmtl Outfit1_hair_Diffuse_Color
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.616557 0.228838 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.616557 0.228838 1.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd Outfit1.png
+map_d Outfit1.png
+
+newmtl Pupil
+Ns 315.686275
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.800000 0.800000 0.800000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd C:\Users\Haatchi\Desktop\pal eye7.psd
+map_d pupil.png
+
+newmtl Pupil_NONE
+Ns 315.686275
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.800000 0.800000 0.800000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd pupil.png
+map_d pupil.png
+
+newmtl hair
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.039527 0.017494 0.068789
+Ks 0.000000 0.000000 0.000000
+Ke 0.079054 0.034988 0.137578
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd D:\Work\ProtoStudy1\PlayerModel\Hair.psd
+map_d Hair.png
+
+newmtl hair_Hair.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.039527 0.017494 0.068789
+Ks 0.000000 0.000000 0.000000
+Ke 0.079054 0.034988 0.137578
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd D:\Work\ProtoStudy1\PlayerModel\Hair.png
+map_d Hair.png
+
+newmtl hair_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.039527 0.017494 0.068789
+Ks 0.000000 0.000000 0.000000
+Ke 0.079054 0.034988 0.137578
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd Hair.png
+map_d Hair.png
+
+newmtl hair_Untitled
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.039527 0.017494 0.068789
+Ks 0.000000 0.000000 0.000000
+Ke 0.079054 0.034988 0.137578
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd D:\Work\ProtoStudy1\PlayerModel\UVgrid.png
+map_d Hair.png
+
+newmtl hat
+Ns 996.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.012696 0.012696 0.012696
+Ks 0.094203 0.094203 0.094203
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd D:\Work\ProtoStudy1\PlayerModel\UVgrid.png

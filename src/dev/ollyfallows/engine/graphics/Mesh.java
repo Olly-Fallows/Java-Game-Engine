@@ -9,15 +9,21 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
-public class Mesh {
+public class Mesh implements Cloneable{
 	
 	private Vertex[] vertices;
 	private int[] indices;
-	private int vao, pbo, ibo;
+	private float[] normals;
+	private float[] textCoords;
+	private Texture texture;
+	private int vao, pbo, ibo, tbo;
 	
-	public Mesh(Vertex[] vertices, int[] indices) {
+	public Mesh(Vertex[] vertices, int[] indices, float[] normals, float[] textCoords, Texture texture) {
 		this.vertices = vertices;
 		this.indices = indices;
+		this.normals = normals;
+		this.textCoords = textCoords;
+		this.texture = texture;
 	}
 	
 	public Mesh create() {
@@ -40,6 +46,13 @@ public class Mesh {
 		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		
+		
+		FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(textCoords.length);
+		textureBuffer.put(textCoords);
+		textureBuffer.flip();
+		
+		tbo = storeData(textureBuffer, 1, 2);
+		
 		IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indices.length);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
@@ -50,6 +63,25 @@ public class Mesh {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		
 		return this;
+	}
+	
+	private int storeData(FloatBuffer buffer, int index, int size) {
+		int bufferID = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, bufferID);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+		GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		return bufferID;
+	}
+	
+	public void destroy() {
+		GL15.glDeleteBuffers(pbo);
+		GL15.glDeleteBuffers(ibo);
+		GL15.glDeleteBuffers(tbo);
+		
+		GL30.glDeleteVertexArrays(vao);
+		
+		texture.destroy();
 	}
 
 	public Vertex[] getVertices() {
@@ -72,5 +104,11 @@ public class Mesh {
 		return ibo;
 	}
 	
+	public Texture getTexture() {
+		return texture;
+	}
 	
+	public Mesh clone() throws CloneNotSupportedException{
+		return (Mesh)super.clone();
+	}
 }

@@ -79,7 +79,7 @@ public class Matrix4f {
 	
 	public static Matrix4f transform(Vector3f pos, Vector3f rot, Vector3f sca) {
 		Matrix4f rotation = multiply(rotationX(rot.x), multiply(rotationY(rot.y), rotationZ(rot.z)));
-		return multiply(translation(pos), multiply(rotation, scalar(sca)));
+		return multiply(rotation, multiply(translation(pos), scalar(sca)));
 	}
 	
 	public static Matrix4f projection(float fov, float aspect, float near, float far) {

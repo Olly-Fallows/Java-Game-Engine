@@ -18,4 +18,8 @@ public class Vector3f {
 	public Vector3f invert() {
 		return new Vector3f(-x,-y,-z);
 	}
+
+	public float length() {
+		return (float)Math.sqrt((x*x)+(y*y)+(z*z));
+	}
 }

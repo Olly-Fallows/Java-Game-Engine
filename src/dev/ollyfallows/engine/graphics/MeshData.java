@@ -2,13 +2,13 @@ package dev.ollyfallows.engine.graphics;
 
 public class MeshData {
 	
-    private float[] vertices;
+    private Vertex[] vertices;
     private float[] textureCoords;
     private float[] normals;
     private int[] indices;
     private float furthestPoint;
  
-    public MeshData(float[] vertices, float[] textureCoords, float[] normals, int[] indices, float furthestPoint) {
+    public MeshData(Vertex[] vertices, float[] textureCoords, float[] normals, int[] indices, float furthestPoint) {
         this.vertices = vertices;
         this.textureCoords = textureCoords;
         this.normals = normals;
@@ -16,7 +16,7 @@ public class MeshData {
         this.furthestPoint = furthestPoint;
     }
  
-    public float[] getVertices() {
+    public Vertex[] getVertices() {
         return vertices;
     }
  

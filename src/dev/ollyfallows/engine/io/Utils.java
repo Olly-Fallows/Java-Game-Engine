@@ -1,4 +1,4 @@
-package dev.ollyfallows.engine;
+package dev.ollyfallows.engine.io;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

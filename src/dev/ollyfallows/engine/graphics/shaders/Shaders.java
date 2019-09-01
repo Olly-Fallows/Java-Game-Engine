@@ -2,7 +2,7 @@ package dev.ollyfallows.engine.graphics.shaders;
 
 import java.util.HashMap;
 
-import dev.ollyfallows.engine.Utils;
+import dev.ollyfallows.engine.io.Utils;
 
 public class Shaders {
 	
