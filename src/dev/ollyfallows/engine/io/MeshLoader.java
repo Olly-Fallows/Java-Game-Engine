@@ -56,9 +56,7 @@ public class MeshLoader {
 	        try {
 	        	String material = null;
 	            while ((line=reader.readLine()) != null) {
-	                if (line.startsWith("mtllib")) {
-	                	
-	                } else if (line.startsWith("v ")) {
+	                if (line.startsWith("v ")) {
 	                    String[] currentLine = line.split(" ");
 	                    Vector3f vertex = new Vector3f((float) Float.valueOf(currentLine[1]),
 	                            (float) Float.valueOf(currentLine[2]),
@@ -85,30 +83,19 @@ public class MeshLoader {
 		                processVertex(vertex1, vertices, indices);
 		                processVertex(vertex2, vertices, indices);
 		                processVertex(vertex3, vertices, indices);
-	                } else if (line.startsWith("usemtl")) {
-	                	if (material != null) {
-		                	System.out.println(line);
-		                	removeUnusedVertices(vertices);
-		        	        Vertex[] verticesArray = new Vertex[vertices.size()];
-		        	        float[] texturesArray = new float[vertices.size() * 2];
-		        	        float[] normalsArray = new float[vertices.size() * 3];
-		        	        float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
-		        	                texturesArray, normalsArray);
-		        	        int[] indicesArray = convertIndicesListToArray(indices);
-		        	        dataList.add(new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, furthest));
-	                	}
-	                	material = line.split(" ")[1];
-	                } else if (line.startsWith("o")) {
-	                	//vertices.removeAll(vertices);
-	                	//textures.removeAll(textures);
-	                	//normals.removeAll(normals);
-	                	//indices.removeAll(indices);
-	                	if (material != null) break;
-	                	material = null;
-	                	System.out.println(line);
 	                }
 	            }
 	            reader.close();
+
+            	removeUnusedVertices(vertices);
+    	        Vertex[] verticesArray = new Vertex[vertices.size()];
+    	        float[] texturesArray = new float[vertices.size() * 2];
+    	        float[] normalsArray = new float[vertices.size() * 3];
+    	        float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
+    	                texturesArray, normalsArray);
+    	        int[] indicesArray = convertIndicesListToArray(indices);
+    	        dataList.add(new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, furthest));
+	            
 	        } catch (IOException e) {
 	            System.err.println("Error reading the file");
 	        }

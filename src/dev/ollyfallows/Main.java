@@ -16,7 +16,7 @@ public class Main {
 		window = new Window(800, 600, "LWJGL test window");
 		window.create();
 		engine = new GameEngine(window);
-		Mesh[] m = MeshLoader.getInstance().loadOBJ("/resources/models/stress test doll/test_stressdoll1.obj", "/resources/models/stress test doll/Outfit1.png");
+		Mesh[] m = MeshLoader.getInstance().loadOBJ("/resources/models/eyeball1/testeye.obj", "/resources/models/eyeball1/eyeball.png");
 		engine.addGameElement(new Entity(new Vector3f(0f,0f,0f), m));
 		engine.loop();
 	}

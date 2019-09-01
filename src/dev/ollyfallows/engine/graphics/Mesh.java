@@ -24,6 +24,10 @@ public class Mesh implements Cloneable{
 		this.normals = normals;
 		this.textCoords = textCoords;
 		this.texture = texture;
+		
+		for (int a=0; a<6; a++)System.out.println(indices[a]);
+		for (int a=0; a<6; a++)System.out.println(normals[a]);
+		for (int a=0; a<6; a++)System.out.println(textCoords[a]);
 	}
 	
 	public Mesh create() {
