@@ -15,7 +15,7 @@ public class Main {
 		window = new Window(800, 600, "LWJGL test window");
 		window.create();
 		engine = new GameEngine(window);
-		engine.addGameElement(new Entity(new Vector3f(0f, -0.75f, -4.0f), MeshLoader.loadMeshs("/resources/models/eyeball1/testeye2.obj")));
+		engine.addGameElement(new Entity(new Vector3f(0f, -0.75f, -4.0f), MeshLoader.loadMeshs("/resources/models/eyeball1/testeye.obj")));
 		engine.loop();
 	}
 	

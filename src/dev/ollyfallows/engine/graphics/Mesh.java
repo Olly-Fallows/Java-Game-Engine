@@ -36,11 +36,16 @@ public class Mesh implements Cloneable{
 		for (int a=0; a<vertices.length; a++) {
 			vertices[a] = new Vertex(new Vector3f(vert[(a*3)], vert[(a*3)+1], vert[(a*3)+2]));
 		}
-		this.textCoords = ObjData.getTexCoordsArray(obj, 2, true);
+		this.textCoords = ObjData.getTexCoordsArray(obj, 2);
 		this.normals = ObjData.getNormalsArray(obj);
 		this.indices = ObjData.getFaceVertexIndicesArray(obj);
-		for (int a=0; a<6; a++)System.out.println(indices[a]);
 		this.texture = texture;
+		
+		System.out.println(obj.getTexCoord(0));
+		
+		for (int a=0; a<6; a++)System.out.println(indices[a]);
+		for (int a=0; a<6; a++)System.out.println(normals[a]);
+		for (int a=0; a<6; a++)System.out.println(textCoords[a]);
 	}
 	
 	public Mesh create() {

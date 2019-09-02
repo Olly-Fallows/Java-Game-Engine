@@ -182,7 +182,8 @@ public class ObjReader
             // vt: Texture coordinates for a vertex
             else if(identifier.equals("vt"))
             {
-                output.addTexCoord(readFloatTuple(st));
+            	FloatTuple ft = readFloatTuple(st);
+                output.addTexCoord(ft);
                 texCoordCounter++;
             }
 
@@ -301,7 +302,6 @@ public class ObjReader
         if (st.hasMoreTokens())
         {
             float y = parse(st.nextToken());
-
             if (st.hasMoreTokens())
             {
                 float z = parse(st.nextToken());
