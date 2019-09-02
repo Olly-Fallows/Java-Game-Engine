@@ -1,19 +1,23 @@
 package dev.ollyfallows.engine.io;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.List;
 
 import dev.ollyfallows.engine.graphics.Mesh;
-import dev.ollyfallows.engine.graphics.obj.Mtl;
-import dev.ollyfallows.engine.graphics.obj.MtlReader;
+import dev.ollyfallows.engine.graphics.Texture;
+import dev.ollyfallows.engine.graphics.Vertex;
 import dev.ollyfallows.engine.graphics.obj.Obj;
 import dev.ollyfallows.engine.graphics.obj.ObjReader;
-import dev.ollyfallows.engine.graphics.obj.ObjSplitting;
+import dev.ollyfallows.engine.maths.Vector2f;
+import dev.ollyfallows.engine.maths.Vector3f;
 
 public class MeshLoader {
-	
+
 	public static Mesh[] loadMeshs(String path) {
 		try {
 			String root = path.substring(0, path.length()-new File(MeshLoader.class.getResource(path).toURI()).getName().length());
@@ -53,6 +57,79 @@ public class MeshLoader {
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
+		}
+		return null;
+	}
+	
+    public static Mesh[] loadOBJ(String path, String textPath) {
+    	MeshData[] data;
+		ArrayList<MeshData> dataList = new ArrayList<MeshData>();
+    	BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
+        } catch (Exception e) {
+            System.err.println("Error: File not found");
+        }
+        String line;
+        List<Vertex> vertices = new ArrayList<Vertex>();
+        List<Vector2f> textures = new ArrayList<Vector2f>();
+        List<Vector3f> normals = new ArrayList<Vector3f>();
+        List<Integer> indices = new ArrayList<Integer>();
+        try {
+        	String material = null;
+            while ((line=reader.readLine()) != null) {
+                if (line.startsWith("v ")) {
+                    String[] currentLine = line.split(" ");
+                    Vector3f vertex = new Vector3f((float) Float.valueOf(currentLine[1]),
+                            (float) Float.valueOf(currentLine[2]),
+                            (float) Float.valueOf(currentLine[3]));
+                    Vertex newVertex = new Vertex(vertex);
+                    vertices.add(newVertex);
+ 
+                } else if (line.startsWith("vt ")) {
+                    String[] currentLine = line.split(" ");
+                    Vector2f texture = new Vector2f((float) Float.valueOf(currentLine[1]),
+                            (float) Float.valueOf(currentLine[2]));
+                    textures.add(texture);
+                } else if (line.startsWith("vn ")) {
+                    String[] currentLine = line.split(" ");
+                    Vector3f normal = new Vector3f((float) Float.valueOf(currentLine[1]),
+                            (float) Float.valueOf(currentLine[2]),
+                            (float) Float.valueOf(currentLine[3]));
+                    normals.add(normal);
+                } else if (line.startsWith("f ")) {
+	                String[] currentLine = line.split(" ");
+	                String[] vertex1 = currentLine[1].split("/");
+	                String[] vertex2 = currentLine[2].split("/");
+	                String[] vertex3 = currentLine[3].split("/");
+	                processVertex(vertex1, vertices, indices);
+	                processVertex(vertex2, vertices, indices);
+	                processVertex(vertex3, vertices, indices);
+                }
+            }
+            reader.close();
+
+        	removeUnusedVertices(vertices);
+	        Vertex[] verticesArray = new Vertex[vertices.size()];
+	        float[] texturesArray = new float[vertices.size() * 2];
+	        float[] normalsArray = new float[vertices.size() * 3];
+	        float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
+	                texturesArray, normalsArray);
+	        int[] indicesArray = convertIndicesListToArray(indices);
+	        dataList.add(new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, furthest));
+            
+        } catch (IOException e) {
+            System.err.println("Error reading the file");
+        }
+        
+        data = dataList.toArray(new MeshData[dataList.size()]);
+        
+        meshData.put(path, data);    	
+		Texture text = TextureLoader.getInstance().loadTexture(textPath);
+		ArrayList<Mesh> m = new ArrayList<Mesh>();
+		
+		for (MeshData md : data) {
+			m.add(new Mesh(md.getVertices(), md.getIndices(), md.getNormals(), md.getTextureCoords(), text).create());
 		}
 		return null;
 	}
