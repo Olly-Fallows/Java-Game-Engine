@@ -38,7 +38,7 @@ public class Mesh implements Cloneable{
 		float[] vert = ObjData.getVerticesArray(obj);
 		this.vertices = new Vertex[vert.length/3];
 		for (int a=0; a<vertices.length; a++) {
-			vertices[a] = new Vertex(new Vector3f(vert[(a*3)], vert[(a*3)+1], vert[(a*3)+2]));
+			vertices[a] = new Vertex(a+1, new Vector3f(vert[(a*3)], vert[(a*3)+1], vert[(a*3)+2]));
 		}
 		this.textCoords = ObjData.getTexCoordsArray(obj, 2);
 		this.normals = ObjData.getNormalsArray(obj);

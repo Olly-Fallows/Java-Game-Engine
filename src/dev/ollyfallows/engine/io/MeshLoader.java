@@ -66,7 +66,7 @@ public class MeshLoader {
 		ArrayList<MeshData> dataList = new ArrayList<MeshData>();
     	BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
+            reader = new BufferedReader(new InputStreamReader(MeshLoader.class.getResourceAsStream(path)));
         } catch (Exception e) {
             System.err.println("Error: File not found");
         }
