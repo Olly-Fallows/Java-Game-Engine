@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import dev.ollyfallows.engine.graphics.Mesh;
+import dev.ollyfallows.engine.graphics.MeshData;
 import dev.ollyfallows.engine.graphics.Texture;
 import dev.ollyfallows.engine.graphics.Vertex;
 import dev.ollyfallows.engine.graphics.obj.Obj;
@@ -123,8 +123,7 @@ public class MeshLoader {
         }
         
         data = dataList.toArray(new MeshData[dataList.size()]);
-        
-        meshData.put(path, data);    	
+           	
 		Texture text = TextureLoader.getInstance().loadTexture(textPath);
 		ArrayList<Mesh> m = new ArrayList<Mesh>();
 		
@@ -133,4 +132,74 @@ public class MeshLoader {
 		}
 		return null;
 	}
+    private static void processVertex(String[] vertex, List<Vertex> vertices, List<Integer> indices) {
+        int index = Integer.parseInt(vertex[0]) - 1;
+        Vertex currentVertex = vertices.get(index);
+        int textureIndex = Integer.parseInt(vertex[1]) - 1;
+        int normalIndex = Integer.parseInt(vertex[2]) - 1;
+        if (!currentVertex.isSet()) {
+            currentVertex.setTextureIndex(textureIndex);
+            currentVertex.setNormalIndex(normalIndex);
+            indices.add(index);
+        } else {
+            dealWithAlreadyProcessedVertex(currentVertex, textureIndex, normalIndex, indices,
+                    vertices);
+        }
+    }
+    private static int[] convertIndicesListToArray(List<Integer> indices) {
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indicesArray.length; i++) {
+            indicesArray[i] = indices.get(i);
+        }
+        return indicesArray;
+    }
+    private static float convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
+            List<Vector3f> normals, Vertex[] verticesArray, float[] texturesArray,
+            float[] normalsArray) {
+        float furthestPoint = 0;
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex currentVertex = vertices.get(i);
+            if (currentVertex.getLength() > furthestPoint) {
+                furthestPoint = currentVertex.getLength();
+            }
+            Vector3f position = currentVertex.getPosition();
+            Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
+            Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
+            verticesArray[i] = currentVertex;
+            texturesArray[i * 2] = textureCoord.x;
+            texturesArray[i * 2 + 1] = 1 - textureCoord.y;
+            normalsArray[i * 3] = normalVector.x;
+            normalsArray[i * 3 + 1] = normalVector.y;
+            normalsArray[i * 3 + 2] = normalVector.z;
+        }
+        return furthestPoint;
+    }
+    private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex,
+            int newNormalIndex, List<Integer> indices, List<Vertex> vertices) {
+        if (previousVertex.hasSameTextureAndNormal(newTextureIndex, newNormalIndex)) {
+            indices.add(previousVertex.getIndex());
+        } else {
+            Vertex anotherVertex = previousVertex.getDuplicateVertex();
+            if (anotherVertex != null) {
+                dealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex,
+                        indices, vertices);
+            } else {
+                Vertex duplicateVertex = new Vertex(vertices.size(), previousVertex.getPosition());
+                duplicateVertex.setTextureIndex(newTextureIndex);
+                duplicateVertex.setNormalIndex(newNormalIndex);
+                previousVertex.setDuplicateVertex(duplicateVertex);
+                vertices.add(duplicateVertex);
+                indices.add(duplicateVertex.getIndex());
+            }
+ 
+        }
+    }
+    private static void removeUnusedVertices(List<Vertex> vertices){
+        for(Vertex vertex:vertices){
+            if(!vertex.isSet()){
+                vertex.setTextureIndex(0);
+                vertex.setNormalIndex(0);
+            }
+        }
+    }
 }
