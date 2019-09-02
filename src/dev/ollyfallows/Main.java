@@ -17,7 +17,7 @@ public class Main {
 		window.create();
 		engine = new GameEngine(window);
 		Mesh[] m = MeshLoader.getInstance().loadOBJ("/resources/models/eyeball1/testeye.obj", "/resources/models/eyeball1/eyeball.png");
-		engine.addGameElement(new Entity(new Vector3f(0f,0f,0f), m));
+		engine.addGameElement(new Entity(new Vector3f(0f,-0.75f,0f), m));
 		engine.loop();
 	}
 	
