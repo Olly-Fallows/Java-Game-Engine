@@ -28,28 +28,25 @@ public class Mesh implements Cloneable{
 		this.normals = normals;
 		this.textCoords = textCoords;
 		this.texture = texture;
-		
-		for (int a=0; a<6; a++)System.out.println(indices[a]);
-		for (int a=0; a<6; a++)System.out.println(normals[a]);
-		for (int a=0; a<6; a++)System.out.println(textCoords[a]);
 	}
 	
 	public Mesh(Obj obj, Texture texture) {
 		float[] vert = ObjData.getVerticesArray(obj);
 		this.vertices = new Vertex[vert.length/3];
 		for (int a=0; a<vertices.length; a++) {
-			vertices[a] = new Vertex(a+1, new Vector3f(vert[(a*3)], vert[(a*3)+1], vert[(a*3)+2]));
+			vertices[a] = new Vertex(a, new Vector3f(vert[(a*3)], vert[(a*3)+1], vert[(a*3)+2]));
 		}
-		this.textCoords = ObjData.getTexCoordsArray(obj, 2);
+		int[] textCoordsi = ObjData.getFaceTexCoordIndicesArray(obj);
+		this.textCoords = new float[textCoordsi.length*2];
+		for (int a=0; a<textCoordsi.length; a++) {
+			textCoords[a*2] = obj.getTexCoord(textCoordsi[a]).getX();
+			textCoords[a*2+1] = obj.getTexCoord(textCoordsi[a]).getY();
+		}
+		System.out.println(textCoordsi.length);
+		System.out.println(textCoords.length);
 		this.normals = ObjData.getNormalsArray(obj);
 		this.indices = ObjData.getFaceVertexIndicesArray(obj);
 		this.texture = texture;
-		
-		System.out.println(obj.getTexCoord(0));
-		
-		for (int a=0; a<6; a++)System.out.println(indices[a]);
-		for (int a=0; a<6; a++)System.out.println(normals[a]);
-		for (int a=0; a<6; a++)System.out.println(textCoords[a]);
 	}
 	
 	public Mesh create() {

@@ -50,7 +50,7 @@ public class MeshLoader {
 				}
 			}*/
 			
-			meshs.add(new Mesh(obj, TextureLoader.getInstance().loadTexture(root+"/eyeball.png")).create());
+			meshs.add(new Mesh(obj, TextureLoader.getInstance().loadTexture("/resources/models/eyeball1"+"/eyeball.png")).create());
 			
 			Mesh[] m = meshs.toArray(new Mesh[meshs.size()]);
 			return m;
@@ -83,7 +83,7 @@ public class MeshLoader {
                     Vector3f vertex = new Vector3f((float) Float.valueOf(currentLine[1]),
                             (float) Float.valueOf(currentLine[2]),
                             (float) Float.valueOf(currentLine[3]));
-                    Vertex newVertex = new Vertex(vertex);
+                    Vertex newVertex = new Vertex(vertices.size(), vertex);
                     vertices.add(newVertex);
  
                 } else if (line.startsWith("vt ")) {
@@ -130,7 +130,7 @@ public class MeshLoader {
 		for (MeshData md : data) {
 			m.add(new Mesh(md.getVertices(), md.getIndices(), md.getNormals(), md.getTextureCoords(), text).create());
 		}
-		return null;
+		return m.toArray(new Mesh[m.size()]);
 	}
     private static void processVertex(String[] vertex, List<Vertex> vertices, List<Integer> indices) {
         int index = Integer.parseInt(vertex[0]) - 1;
@@ -167,7 +167,7 @@ public class MeshLoader {
             Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
             verticesArray[i] = currentVertex;
             texturesArray[i * 2] = textureCoord.x;
-            texturesArray[i * 2 + 1] = 1 - textureCoord.y;
+            texturesArray[i * 2 + 1] = textureCoord.y;
             normalsArray[i * 3] = normalVector.x;
             normalsArray[i * 3 + 1] = normalVector.y;
             normalsArray[i * 3 + 2] = normalVector.z;
